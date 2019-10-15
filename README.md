@@ -9,6 +9,13 @@ Você vai trabalhar em um projeto que já está pronto. E deve seguir os pontos 
 Utilize as boas práticas de desenvolvimento, e imagine que outras pessoas poderão ler e trabalhar no seu projeto.
 
 
+# Importante
+
+Faça o fork do projeto.
+
+Leia todas as instruções antes de começar.
+
+
 # Exercícios essenciais
 
 A arquitetura de ViewModel do projeto parece estar com algum problema, o projeto não compila. 
