@@ -11,9 +11,11 @@ Utilize as boas práticas de desenvolvimento, e imagine que outras pessoas poder
 
 # Exercícios essenciais
 
+A arquitetura de ViewModel do projeto parece estar com algum problema, o projeto não compila. 
+
 Infelizmente a resolução das imagens no aplicativo não estão boas, e isso precisa ser arrumado. Por favor, melhore a resolução das imagens, mas lembre-se, performance também é muito importante num aplicativo de notícias. O usuário não quer perder tempo.
 
-A home do aplicativo possui um feed de notícias, e seria ótimo se a paginação estivesse funcionando. Existem milhares de notícias disponíveis na API, e seria ótimo se nosso usuário tivesse acesso à mais delas.
+A home do aplicativo possui um feed de notícias, e seria ótimo se a paginação estivesse funcionando. Pois existem milhares de notícias disponíveis na API.
 
 Hoje o aplicativo não possui nenhuma cobertura de testes, ou seja, não possui testes unitários e nem testes instrumentais. Por favor, implemente alguns testes que pelo menos cubram os principais fluxos do app.
 
@@ -26,6 +28,7 @@ Hoje o usuário só consegue ler uma notícia se ele estiver on-line, que tal im
 
 Melhor do que ler uma notícia super interessante, é poder compartilhar essa notícia. Por favor, implemente no aplicativo uma forma de compartilhar as notícias nas redes sociais.
 
+Melhorar a estrutura do ViewModel implementada no projeto.
 
 # Avaliação
 
