@@ -1,3 +1,10 @@
+# Importante
+
+Leia todas as instruções antes de começar.
+
+Faça clone desse repositório e suba em outro repositório próprio, não faça fork.
+
+
 # Desafio
 
 Você vai trabalhar em um projeto que já está pronto. E deve seguir os pontos abaixo, para entender o que deve fazer nesse projeto. Leia atentamente cada ponto antes de começar.
@@ -7,13 +14,6 @@ Você vai trabalhar em um projeto que já está pronto. E deve seguir os pontos 
 
 É permitido usar quaisquer bibliotecas que desejar para ajudar a construir este aplicativo
 Utilize as boas práticas de desenvolvimento, e imagine que outras pessoas poderão ler e trabalhar no seu projeto.
-
-
-# Importante
-
-Faça o fork do projeto.
-
-Leia todas as instruções antes de começar.
 
 
 # Exercícios essenciais
