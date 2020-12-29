@@ -8,32 +8,39 @@
         android:layout_height="match_parent"
         tools:context=".ui.timeline.TimelineFragment">
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/timeline_srl"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/timeline_rv"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:cacheColorHint="@android:color/transparent"
-                android:clipToPadding="false"
-                android:divider="@color/transparent"
-                android:listSelector="@android:color/transparent"
-                android:scrollbars="none"
-                android:visibility="gone"
-                tools:listitem="@layout/item_timeline"/>
+                android:orientation="vertical">
 
-        <include
-                android:id="@+id/state_progress_timeline"
-                layout="@layout/include_state_progress_timeline"/>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/timeline_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:cacheColorHint="@android:color/transparent"
+                    android:clipToPadding="false"
+                    android:divider="@color/transparent"
+                    android:listSelector="@android:color/transparent"
+                    android:scrollbars="none"
+                    android:visibility="gone"
+                    tools:listitem="@layout/item_timeline"/>
 
-        <include
-                android:id="@+id/state_without_conn_timeline"
-                layout="@layout/include_state_without_conn_timeline"
-                android:visibility="gone"/>
+            <include
+                    android:id="@+id/state_progress_timeline"
+                    layout="@layout/include_state_progress_timeline"/>
 
-    </LinearLayout>
+            <include
+                    android:id="@+id/state_without_conn_timeline"
+                    layout="@layout/include_state_without_conn_timeline"
+                    android:visibility="gone"/>
+
+        </LinearLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

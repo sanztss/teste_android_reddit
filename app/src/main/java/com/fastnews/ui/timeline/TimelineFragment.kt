@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -28,6 +27,10 @@ class TimelineFragment : Fragment() {
     }
 
     private lateinit var adapter: TimelineAdapter
+
+    // Indicate the fullname of an item in the listing to use as the anchor point of the slice.
+    // (https://www.reddit.com/dev/api/)
+    private var afterKey = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,19 +77,58 @@ class TimelineFragment : Fragment() {
             onClickItem(it, imageView)
         }
 
-        timeline_rv.layoutManager = LinearLayoutManager(context)
+        val linearLayoutManager = LinearLayoutManager(context)
+        timeline_rv.layoutManager = linearLayoutManager
         timeline_rv.itemAnimator = DefaultItemAnimator()
         timeline_rv.adapter = adapter
+
+        timeline_srl.setOnRefreshListener { getLastestPostsListener() }
+        timeline_rv.addOnScrollListener(object :
+            TimelineLoadMoreListener(linearLayoutManager) {
+
+            override fun isRefreshing(): Boolean {
+                return timeline_srl.isRefreshing
+            }
+
+            override fun fetchMoreData() {
+                timeline_srl.isRefreshing = true
+                timeline_rv.post {
+                    context.let {
+                        if (VerifyNetworkInfo.isConnected(it!!)) {
+                            fetchTimelineMoreData()
+                        } else {
+                            timeline_srl.isRefreshing = false
+                        }
+                    }
+                }
+            }
+        })
     }
 
     private fun fetchTimeline() {
-        viewModel.getPosts("", 50).observe(this, Observer<List<PostData>> { posts ->
+        viewModel.getPosts(afterKey).observe(viewLifecycleOwner, { posts ->
             posts.let {
-                adapter.setData(posts)
-                hideProgress()
-                showPosts()
+                if (posts.size > 0) {
+                    afterKey = (posts[posts.size - 1]).name
+                    adapter.setData(posts)
+                    hideProgress()
+                    showPosts()
+                    timeline_srl.isRefreshing = false
+                }
             }
         })
+    }
+
+    private fun fetchTimelineMoreData() {
+        viewModel.getPosts(afterKey).observe(viewLifecycleOwner, { posts ->
+                posts.let {
+                    if (posts.size > 0) {
+                        afterKey = (posts[posts.size - 1]).name
+                        adapter.addData(posts)
+                        timeline_srl.isRefreshing = false
+                    }
+                }
+            })
     }
 
     private fun showPosts() {
@@ -116,5 +158,17 @@ class TimelineFragment : Fragment() {
         var bundle = Bundle()
         bundle.putParcelable(KEY_POST, postData)
         findNavController().navigate(R.id.action_timeline_to_detail, bundle, null, extras)
+    }
+
+    private fun getLastestPostsListener() {
+        context.let {
+            if (VerifyNetworkInfo.isConnected(it!!)) {
+                afterKey = ""
+                fetchTimeline()
+                hideNoConnectionState()
+            } else {
+                timeline_srl.isRefreshing = false
+            }
+        }
     }
 }
