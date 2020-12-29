@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.flipboard:bottomsheet-core:1.5.0@aar">
     <CLASSES>
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6407386963e1bbf539a543890b29b24b/AndroidManifest.xml" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6407386963e1bbf539a543890b29b24b/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6407386963e1bbf539a543890b29b24b/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7cd4900e037ec6c55800bc134a01000f/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7cd4900e037ec6c55800bc134a01000f/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/7cd4900e037ec6c55800bc134a01000f/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
