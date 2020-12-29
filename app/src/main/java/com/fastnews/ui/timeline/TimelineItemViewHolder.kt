@@ -6,6 +6,10 @@ import android.text.TextUtils
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
+import com.fastnews.R
 import com.fastnews.mechanism.TimeElapsed
 import com.fastnews.service.model.PostData
 import kotlinx.android.synthetic.main.include_item_timeline_ic_comments.view.*
@@ -48,12 +52,28 @@ class TimelineItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         value?.thumbnail.let {
 
             val PREFIX_HTTP = "http"
+            var sourceImageURL = ""
+            var imageId = ""
+
+            if (value?.preview?.images != null && value.preview.images.isNotEmpty()) {
+                imageId = value.preview.images[0].id
+
+                if (!TextUtils.isEmpty(value.preview.images[0].source.url)) {
+                    sourceImageURL = value.preview.images[0].source.url.replace("amp;s", "s")
+                }
+            }
+
+            val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+                .signature(ObjectKey(imageId))
 
             if (!TextUtils.isEmpty(it) && it!!.startsWith(PREFIX_HTTP)) {
                 Glide.with(view.item_timeline_thumbnail.context)
-                    .load(it)
-                    .placeholder(ColorDrawable(Color.LTGRAY))
-                    .error(ColorDrawable(Color.DKGRAY))
+                    .load(sourceImageURL)
+                    .centerCrop()
+                    .thumbnail(Glide.with(view.item_timeline_thumbnail.context).load(it))
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(ColorDrawable(Color.GRAY))
+                    .apply(requestOptions)
                     .into(view.item_timeline_thumbnail)
                 view.item_timeline_thumbnail.visibility = View.VISIBLE
             } else {

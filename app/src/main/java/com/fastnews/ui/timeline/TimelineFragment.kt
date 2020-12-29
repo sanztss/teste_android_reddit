@@ -19,7 +19,6 @@ import com.fastnews.service.model.PostData
 import com.fastnews.ui.detail.DetailFragment.Companion.KEY_POST
 import com.fastnews.viewmodel.PostViewModel
 import kotlinx.android.synthetic.main.fragment_timeline.*
-import kotlinx.android.synthetic.main.include_state_without_conn_timeline.*
 
 
 class TimelineFragment : Fragment() {

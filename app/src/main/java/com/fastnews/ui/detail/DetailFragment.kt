@@ -1,5 +1,7 @@
 package com.fastnews.ui.detail
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.transition.TransitionInflater
@@ -13,6 +15,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.fastnews.R
 import com.fastnews.mechanism.TimeElapsed
 import com.fastnews.mechanism.VerifyNetworkInfo
@@ -22,7 +27,6 @@ import com.fastnews.ui.web.CustomTabsWeb
 import com.fastnews.viewmodel.CommentViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_detail_post.*
-import kotlinx.android.synthetic.main.fragment_timeline.*
 import kotlinx.android.synthetic.main.include_detail_post_thumbnail.*
 import kotlinx.android.synthetic.main.include_detail_post_title.*
 import kotlinx.android.synthetic.main.include_item_timeline_ic_score.*
@@ -160,28 +164,32 @@ class DetailFragment : Fragment() {
     }
 
     private fun populateThumbnail() {
-        val PREFIX_HTTP = "http"
-        var thumbnailUrl = ""
+        post?.thumbnail.let {
+            val PREFIX_HTTP = "http"
+            var sourceImageURL = ""
+            var imageId = ""
 
-        // TODO Fix high quality images
-        /*if(post?.preview != null) {
-            post?.preview?.images?.map {
-                if (!TextUtils.isEmpty(it.source.url)) {
-                    thumbnailUrl = it.source.url
+            if (post?.preview?.images != null && post!!.preview.images.isNotEmpty()) {
+                imageId = post!!.preview.images[0].id
+
+                if (!TextUtils.isEmpty(post!!.preview.images[0].source.url)) {
+                    sourceImageURL = post!!.preview.images[0].source.url.replace("amp;s", "s")
                 }
             }
-        }*/
 
-        if (!TextUtils.isEmpty(post?.thumbnail) && post?.thumbnail!!.startsWith(PREFIX_HTTP)) {
-            thumbnailUrl = post!!.thumbnail
-        }
+            val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+                .signature(ObjectKey(imageId))
 
-        if (!TextUtils.isEmpty(thumbnailUrl)) {
-            Glide.with(item_detail_post_thumbnail.context)
-                .load(thumbnailUrl)
-                .placeholder(R.drawable.ic_placeholder)
-                .into(item_detail_post_thumbnail)
-            item_detail_post_thumbnail.visibility = View.VISIBLE
+            if (!TextUtils.isEmpty(it) && it!!.startsWith(PREFIX_HTTP)) {
+                Glide.with(item_detail_post_thumbnail.context)
+                    .load(sourceImageURL)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_placeholder)
+                    .error(ColorDrawable(Color.GRAY))
+                    .apply(requestOptions)
+                    .into(item_detail_post_thumbnail)
+                item_detail_post_thumbnail.visibility = View.VISIBLE
+            }
         }
     }
 
