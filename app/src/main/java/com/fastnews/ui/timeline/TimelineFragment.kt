@@ -46,14 +46,28 @@ class TimelineFragment : Fragment() {
         buildActionBar()
         buildTimeline()
         verifyConnectionState()
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.setRvItems(adapter.items)
     }
 
     private fun verifyConnectionState() {
         context.let {
             if (VerifyNetworkInfo.isConnected(it!!)) {
                 hideNoConnectionState()
-                showProgress()
-                fetchTimeline()
+                if (viewModel.items.size > 0) {
+                    afterKey = (viewModel.items[viewModel.items.size - 1]).name
+                    adapter.setData(viewModel.items)
+                    hideProgress()
+                    showPosts()
+                    timeline_srl.isRefreshing = false
+                } else {
+                    showProgress()
+                    fetchTimeline()
+                }
             } else {
                 hideProgress()
                 showNoConnectionState()

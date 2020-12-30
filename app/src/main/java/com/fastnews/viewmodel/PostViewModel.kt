@@ -1,7 +1,6 @@
 package com.fastnews.viewmodel
 
 import android.app.Application
-import androidx.annotation.UiThread
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +12,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
     private lateinit var posts: MutableLiveData<MutableList<PostData>>
 
+    var items: MutableList<PostData> = mutableListOf()
+
     fun getPosts(after: String): LiveData<MutableList<PostData>> {
         posts = MutableLiveData()
 
@@ -22,6 +23,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             posts.postValue(it.orEmpty() as MutableList<PostData>?)
         }
         return posts
+    }
+
+    fun setRvItems(rvItems: MutableList<PostData>) {
+        items = rvItems
     }
 
 }
