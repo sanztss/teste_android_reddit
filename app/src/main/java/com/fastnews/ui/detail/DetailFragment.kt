@@ -1,14 +1,12 @@
 package com.fastnews.ui.detail
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.transition.TransitionInflater
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -32,6 +30,7 @@ import kotlinx.android.synthetic.main.include_detail_post_title.*
 import kotlinx.android.synthetic.main.include_item_timeline_ic_score.*
 import kotlinx.android.synthetic.main.include_item_timeline_timeleft.*
 
+
 class DetailFragment : Fragment() {
 
     companion object {
@@ -44,7 +43,11 @@ class DetailFragment : Fragment() {
         ViewModelProviders.of(this).get(CommentViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         this.arguments.let {
             post = it?.getParcelable(KEY_POST)
         }
@@ -64,10 +67,13 @@ class DetailFragment : Fragment() {
 
     private fun buildActionBar() {
         val activity = activity as AppCompatActivity
-
-        //activity.setSupportActionBar(toolbar)
         activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_fragment_detail, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun populateUi() {
@@ -99,13 +105,15 @@ class DetailFragment : Fragment() {
 
     private fun fetchComments() {
             post.let {
-                commentViewModel.getComments(postId = post!!.id).observe(viewLifecycleOwner, Observer<List<CommentData>> { comments ->
-                    comments.let {
-                        populateComments(comments)
-                        hideStateProgress()
-                        showComments()
-                    }
-                })
+                commentViewModel.getComments(postId = post!!.id).observe(
+                    viewLifecycleOwner,
+                    Observer<List<CommentData>> { comments ->
+                        comments.let {
+                            populateComments(comments)
+                            hideStateProgress()
+                            showComments()
+                        }
+                    })
             }
     }
 
@@ -201,7 +209,11 @@ class DetailFragment : Fragment() {
                     customTabsWeb.openUrlWithCustomTabs()
                 }
             } else {
-                Snackbar.make(item_detail_post_thumbnail, R.string.error_detail_post_url, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(
+                    item_detail_post_thumbnail,
+                    R.string.error_detail_post_url,
+                    Snackbar.LENGTH_SHORT
+                ).show();
             }
         }
     }
@@ -215,7 +227,17 @@ class DetailFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> findNavController().navigateUp()
+            R.id.action_share -> sharePost()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun sharePost() {
+        val shareIntent = Intent()
+        shareIntent.action = Intent.ACTION_SEND
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra( Intent.EXTRA_TEXT, post?.url)
+        startActivity(shareIntent)
+
     }
 }
