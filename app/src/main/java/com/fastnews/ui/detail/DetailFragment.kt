@@ -99,7 +99,7 @@ class DetailFragment : Fragment() {
 
     private fun fetchComments() {
             post.let {
-                commentViewModel.getComments(postId = post!!.id).observe(this, Observer<List<CommentData>> { comments ->
+                commentViewModel.getComments(postId = post!!.id).observe(viewLifecycleOwner, Observer<List<CommentData>> { comments ->
                     comments.let {
                         populateComments(comments)
                         hideStateProgress()
@@ -115,7 +115,7 @@ class DetailFragment : Fragment() {
                 detail_post_comments.removeAllViews()
 
                 for (comment in comments) {
-                    val itemReview = CommentItem.newInstance(activity!!, comment)
+                    val itemReview = CommentItem.newInstance(requireActivity(), comment)
                     detail_post_comments.addView(itemReview)
                 }
             })
@@ -166,8 +166,8 @@ class DetailFragment : Fragment() {
     private fun populateThumbnail() {
         post?.thumbnail.let {
             val PREFIX_HTTP = "http"
-            var sourceImageURL = ""
             var imageId = ""
+            var sourceImageURL = ""
 
             if (post?.preview?.images != null && post!!.preview.images.isNotEmpty()) {
                 imageId = post!!.preview.images[0].id
@@ -197,7 +197,7 @@ class DetailFragment : Fragment() {
         item_detail_post_thumbnail.setOnClickListener {
             if(!post?.url.isNullOrEmpty()) {
                 context.let {
-                    val customTabsWeb = CustomTabsWeb(context!!, post?.url!!)
+                    val customTabsWeb = CustomTabsWeb(requireContext(), post?.url!!)
                     customTabsWeb.openUrlWithCustomTabs()
                 }
             } else {
