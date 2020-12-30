@@ -106,7 +106,7 @@ class TimelineFragment : Fragment() {
     }
 
     private fun fetchTimeline() {
-        viewModel.getPosts(afterKey).observe(viewLifecycleOwner, { posts ->
+        viewModel.getPosts("").observe(viewLifecycleOwner, { posts ->
             posts.let {
                 if (posts.size > 0) {
                     afterKey = (posts[posts.size - 1]).name
@@ -163,7 +163,6 @@ class TimelineFragment : Fragment() {
     private fun getLastestPostsListener() {
         context.let {
             if (VerifyNetworkInfo.isConnected(it!!)) {
-                afterKey = ""
                 fetchTimeline()
                 hideNoConnectionState()
             } else {
