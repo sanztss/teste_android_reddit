@@ -1,32 +1,42 @@
 package com.fastnews.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.fastnews.mechanism.Coroutines
+import androidx.lifecycle.*
 import com.fastnews.repository.PostRepository
 import com.fastnews.service.model.PostData
+import kotlinx.coroutines.launch
 
-class PostViewModel(application: Application) : AndroidViewModel(application) {
+class PostViewModel(private val repository : PostRepository) : ViewModel() {
 
-    private lateinit var posts: MutableLiveData<MutableList<PostData>>
-
+    lateinit var posts: MutableLiveData<MutableList<PostData>>
     var items: MutableList<PostData> = mutableListOf()
 
     fun getPosts(after: String): LiveData<MutableList<PostData>> {
         posts = MutableLiveData()
 
-        Coroutines.ioThenMain({
-            PostRepository.getPosts(after, 10)
-        }) {
-            posts.postValue(it.orEmpty() as MutableList<PostData>?)
+        viewModelScope.launch {
+            val result =  repository.getPosts(after, 10)
+
+            posts.postValue(result as MutableList<PostData>?)
         }
         return posts
     }
 
     fun setRvItems(rvItems: MutableList<PostData>) {
         items = rvItems
+    }
+
+    fun savePostsOnCache(posts: MutableList<PostData>) {
+        viewModelScope.launch {
+            repository.setPostsOnCache(posts)
+        }
+    }
+
+    fun getPostsFromCache(): LiveData<MutableList<PostData>> {
+        posts = MutableLiveData()
+        viewModelScope.launch {
+            posts.postValue(repository.getPostsFromCache() as MutableList<PostData>?)
+        }
+        return posts
     }
 
 }

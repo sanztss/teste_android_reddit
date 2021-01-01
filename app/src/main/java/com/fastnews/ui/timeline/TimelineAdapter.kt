@@ -25,7 +25,6 @@ class TimelineAdapter(val onClickItem: (PostData, ImageView) -> Unit) : Recycler
         notifyDataSetChanged()
     }
 
-
     override fun getItemCount(): Int = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineItemViewHolder
@@ -36,7 +35,6 @@ class TimelineAdapter(val onClickItem: (PostData, ImageView) -> Unit) : Recycler
             false
         )
     )
-
 
     override fun onBindViewHolder(holder: TimelineItemViewHolder, position: Int) {
         holder.data = items[position]

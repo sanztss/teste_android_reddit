@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -18,13 +17,12 @@ import com.fastnews.service.model.PostData
 import com.fastnews.ui.detail.DetailFragment.Companion.KEY_POST
 import com.fastnews.viewmodel.PostViewModel
 import kotlinx.android.synthetic.main.fragment_timeline.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class TimelineFragment : Fragment() {
 
-    private val viewModel: PostViewModel by lazy {
-        ViewModelProviders.of(this).get(PostViewModel::class.java)
-    }
+    private val viewModel by viewModel<PostViewModel>()
 
     private lateinit var adapter: TimelineAdapter
 
@@ -70,11 +68,12 @@ class TimelineFragment : Fragment() {
                 }
             } else {
                 hideProgress()
-                showNoConnectionState()
+                //showNoConnectionState()
 
-                state_without_conn_timeline.setOnClickListener {
+                /*state_without_conn_timeline.setOnClickListener {
                     verifyConnectionState()
-                }
+                }*/
+                fetchTimelineFromCache()
             }
         }
     }
@@ -123,6 +122,7 @@ class TimelineFragment : Fragment() {
         viewModel.getPosts("").observe(viewLifecycleOwner, { posts ->
             posts.let {
                 if (posts.size > 0) {
+                    viewModel.savePostsOnCache(posts)
                     afterKey = (posts[posts.size - 1]).name
                     adapter.setData(posts)
                     hideProgress()
@@ -137,12 +137,27 @@ class TimelineFragment : Fragment() {
         viewModel.getPosts(afterKey).observe(viewLifecycleOwner, { posts ->
                 posts.let {
                     if (posts.size > 0) {
+                        viewModel.savePostsOnCache(posts)
                         afterKey = (posts[posts.size - 1]).name
                         adapter.addData(posts)
                         timeline_srl.isRefreshing = false
                     }
                 }
             })
+    }
+
+    private fun fetchTimelineFromCache() {
+        viewModel.getPostsFromCache().observe(viewLifecycleOwner, { posts ->
+            posts.let {
+                if (posts.size > 0) {
+                    afterKey = (posts[posts.size - 1]).name
+                    adapter.setData(posts)
+                    hideProgress()
+                    showPosts()
+                    timeline_srl.isRefreshing = false
+                }
+            }
+        })
     }
 
     private fun showPosts() {

@@ -56,7 +56,7 @@ class TimelineItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
             var imageId = ""
 
             if (value?.preview?.images != null && value.preview.images.isNotEmpty()) {
-                imageId = value.preview.images[0].id
+                imageId = value.preview.images[0].previewImageId
 
                 if (!TextUtils.isEmpty(value.preview.images[0].source.url)) {
                     sourceImageURL = value.preview.images[0].source.url.replace("amp;s", "s")

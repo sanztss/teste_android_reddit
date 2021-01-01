@@ -10,7 +10,6 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -29,6 +28,7 @@ import kotlinx.android.synthetic.main.include_detail_post_thumbnail.*
 import kotlinx.android.synthetic.main.include_detail_post_title.*
 import kotlinx.android.synthetic.main.include_item_timeline_ic_score.*
 import kotlinx.android.synthetic.main.include_item_timeline_timeleft.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class DetailFragment : Fragment() {
@@ -39,9 +39,10 @@ class DetailFragment : Fragment() {
 
     private var post: PostData? = null
 
-    private val commentViewModel: CommentViewModel by lazy {
+    private val commentViewModel by viewModel<CommentViewModel>()
+    /*private val commentViewModel: CommentViewModel by lazy {
         ViewModelProviders.of(this).get(CommentViewModel::class.java)
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -177,11 +178,11 @@ class DetailFragment : Fragment() {
             var imageId = ""
             var sourceImageURL = ""
 
-            if (post?.preview?.images != null && post!!.preview.images.isNotEmpty()) {
-                imageId = post!!.preview.images[0].id
+            if (post?.preview?.images != null && post!!.preview?.images!!.isNotEmpty()) {
+                imageId = post!!.preview!!.images[0].previewImageId
 
-                if (!TextUtils.isEmpty(post!!.preview.images[0].source.url)) {
-                    sourceImageURL = post!!.preview.images[0].source.url.replace("amp;s", "s")
+                if (!TextUtils.isEmpty(post!!.preview!!.images[0].source.url)) {
+                    sourceImageURL = post!!.preview!!.images[0].source.url.replace("amp;s", "s")
                 }
             }
 
@@ -191,7 +192,6 @@ class DetailFragment : Fragment() {
             if (!TextUtils.isEmpty(it) && it!!.startsWith(PREFIX_HTTP)) {
                 Glide.with(item_detail_post_thumbnail.context)
                     .load(sourceImageURL)
-                    .centerCrop()
                     .placeholder(R.drawable.ic_placeholder)
                     .error(ColorDrawable(Color.GRAY))
                     .apply(requestOptions)
