@@ -2,7 +2,6 @@ package com.fastnews.service.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.android.parcel.Parcelize
 
 data class CommentResponse(val data: CommentDataChild)
 
@@ -19,4 +18,5 @@ data class CommentData(
     val name: String,
     val downs: Int,
     val ups: Int,
-    val created_utc: Long)
+    val created_utc: Long,
+    val post_id: String?)

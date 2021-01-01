@@ -27,4 +27,18 @@ class CommentViewModel(private val repository : CommentRepository) : ViewModel()
         return comments
     }
 
+    fun saveCommentsOnCache(comments: List<CommentData>, postId: String) {
+        viewModelScope.launch {
+            repository.setCommentsOnCache(comments, postId)
+        }
+    }
+
+    fun getCommentsFromCache(postId: String): LiveData<List<CommentData>> {
+        comments = MutableLiveData()
+        viewModelScope.launch {
+            comments.postValue(repository.getCommentsFromCache(postId) as List<CommentData>?)
+        }
+        return comments
+    }
+
 }

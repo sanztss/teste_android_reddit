@@ -6,8 +6,8 @@ import com.fastnews.service.model.CommentData
 @Dao
 interface CommentDao {
 
-    @Query("SELECT * FROM comment_table ORDER BY created_utc DESC")
-    fun getCommentsSortedByDateCreated(): List<CommentData>
+    @Query("SELECT * FROM comment_table WHERE post_id = :postId ORDER BY created_utc DESC")
+    fun getCommentsSortedByDateCreated(postId: String): List<CommentData>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(commentData: CommentData)

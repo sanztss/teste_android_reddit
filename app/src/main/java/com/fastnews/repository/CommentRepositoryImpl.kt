@@ -3,6 +3,8 @@ package com.fastnews.repository
 import com.fastnews.data.CommentDao
 import com.fastnews.service.api.RedditAPI
 import com.fastnews.service.model.CommentData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class CommentRepositoryImpl(
     private val dao: CommentDao
@@ -28,6 +30,30 @@ class CommentRepositoryImpl(
 
         return result
 
+    }
+
+    override suspend fun setCommentsOnCache(comments: List<CommentData>, postId: String) {
+        return withContext(Dispatchers.IO) {
+            comments.forEach {
+                val commentData = CommentData(
+                    id = it.id,
+                    author = it.author,
+                    body = it.body,
+                    name = it.name,
+                    downs = it.downs,
+                    ups = it.ups,
+                    created_utc = it.created_utc,
+                    post_id = postId
+                )
+                dao.insert(commentData)
+            }
+        }
+    }
+
+    override suspend fun getCommentsFromCache(postId: String): List<CommentData> {
+        return withContext(Dispatchers.IO) {
+            dao.getCommentsSortedByDateCreated(postId)
+        }
     }
 
 }

@@ -92,11 +92,7 @@ class DetailFragment : Fragment() {
                 fetchComments()
             } else {
                 hideStateProgress()
-                showNoConnectionState()
-
-                state_without_conn_detail_post.setOnClickListener {
-                    verifyConnectionState()
-                }
+                fetchCommentsFromCache()
             }
         }
     }
@@ -107,12 +103,37 @@ class DetailFragment : Fragment() {
                     viewLifecycleOwner,
                     Observer<List<CommentData>> { comments ->
                         comments.let {
-                            populateComments(comments)
-                            hideStateProgress()
-                            showComments()
+                            if (comments.size > 0) {
+                                commentViewModel.saveCommentsOnCache(comments, post!!.id)
+                                populateComments(comments)
+                                hideStateProgress()
+                                showComments()
+                            }
                         }
                     })
             }
+    }
+
+    private fun fetchCommentsFromCache() {
+        post.let {
+            commentViewModel.getCommentsFromCache(postId = post!!.id).observe(
+                viewLifecycleOwner,
+                Observer<List<CommentData>> { comments ->
+                    comments.let {
+                        if (comments.size > 0) {
+                            populateComments(comments)
+                            hideStateProgress()
+                            showComments()
+                        } else {
+                            showNoConnectionState()
+
+                            state_without_conn_detail_post.setOnClickListener {
+                                verifyConnectionState()
+                            }
+                        }
+                    }
+                })
+        }
     }
 
     private fun populateComments(comments: List<CommentData>) {
