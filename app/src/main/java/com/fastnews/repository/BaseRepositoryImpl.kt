@@ -5,7 +5,7 @@ import com.fastnews.service.api.Result
 import retrofit2.Response
 import java.io.IOException
 
-open class BaseRepository {
+open class BaseRepositoryImpl {
 
     suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>, errorMessage: String): T? {
 

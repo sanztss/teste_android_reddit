@@ -68,11 +68,6 @@ class TimelineFragment : Fragment() {
                 }
             } else {
                 hideProgress()
-                //showNoConnectionState()
-
-                /*state_without_conn_timeline.setOnClickListener {
-                    verifyConnectionState()
-                }*/
                 fetchTimelineFromCache()
             }
         }

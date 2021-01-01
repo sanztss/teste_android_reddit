@@ -40,9 +40,6 @@ class DetailFragment : Fragment() {
     private var post: PostData? = null
 
     private val commentViewModel by viewModel<CommentViewModel>()
-    /*private val commentViewModel: CommentViewModel by lazy {
-        ViewModelProviders.of(this).get(CommentViewModel::class.java)
-    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -179,10 +176,10 @@ class DetailFragment : Fragment() {
             var sourceImageURL = ""
 
             if (post?.preview?.images != null && post!!.preview?.images!!.isNotEmpty()) {
-                imageId = post!!.preview!!.images[0].previewImageId
+                imageId = post!!.preview!!.images!![0].previewImageId
 
-                if (!TextUtils.isEmpty(post!!.preview!!.images[0].source.url)) {
-                    sourceImageURL = post!!.preview!!.images[0].source.url.replace("amp;s", "s")
+                if (!TextUtils.isEmpty(post!!.preview!!.images!![0].source?.url)) {
+                    sourceImageURL = post!!.preview!!.images!![0].source?.url!!.replace("amp;s", "s")
                 }
             }
 

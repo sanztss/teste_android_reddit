@@ -7,7 +7,7 @@ import com.fastnews.service.model.CommentData
 class CommentRepositoryImpl(
     private val dao: CommentDao
 ) :
-    BaseRepository(),
+    BaseRepositoryImpl(),
     CommentRepository {
 
     override suspend fun getComments(postId: String): List<CommentData> {

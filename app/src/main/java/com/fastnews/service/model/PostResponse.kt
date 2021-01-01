@@ -40,7 +40,7 @@ data class Preview(
     var previewId: Int,
     @SerializedName("images")
     @Expose
-    val images: List<PreviewImage>) : Parcelable
+    val images: List<PreviewImage>?) : Parcelable
 
 @Entity(tableName = "preview_image_table")
 @Parcelize
@@ -52,7 +52,7 @@ data class PreviewImage(
     @SerializedName("source")
     @Expose
     @Embedded
-    val source: PreviewImageSource) : Parcelable
+    val source: PreviewImageSource?) : Parcelable
 
 @Entity(tableName = "preview_image_source_table")
 @Parcelize
@@ -63,10 +63,10 @@ data class PreviewImageSource(
     var previewImageSourceId: Int,
     @SerializedName("url")
     @Expose
-    val url: String,
+    val url: String?,
     @SerializedName("width")
     @Expose
-    val width: Int,
+    val width: Int?,
     @SerializedName("height")
     @Expose
-    val height: Int) : Parcelable
+    val height: Int?) : Parcelable

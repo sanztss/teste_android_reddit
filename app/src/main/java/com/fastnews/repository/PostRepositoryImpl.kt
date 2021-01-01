@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 class PostRepositoryImpl(
     private val dao: PostDao
 ) :
-    BaseRepository(),
+    BaseRepositoryImpl(),
     PostRepository {
 
     override suspend fun getPosts(after: String, limit: Int): List<PostData> {
